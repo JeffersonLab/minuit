@@ -164,7 +164,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 
-# @(#)root/mathcore:$Name:  $:$Id: Makefile.in,v 1.1 2008/02/09 21:56:11 edwards Exp $
+# @(#)root/mathcore:$Name:  $:$Id: Makefile.in,v 1.1.1.1 2008/02/09 21:56:11 edwards Exp $
 # Author: L. Moneta    2005  
 #
 #

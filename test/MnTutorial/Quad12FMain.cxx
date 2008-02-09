@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: Quad12FMain.cxx,v 1.1 2008/02/09 21:56:15 edwards Exp $
+// @(#)root/minuit2:$Name:  $:$Id: Quad12FMain.cxx,v 1.1.1.1 2008/02/09 21:56:15 edwards Exp $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
