@@ -19,12 +19,12 @@ dnl   for solaris
 CC=$CXX
 
 dnl disable static building
-AM_DISABLE_STATIC
-AM_PROG_LIBTOOL
+#AM_DISABLE_STATIC
+#AM_PROG_LIBTOOL
 
 dnl Checks for libraries.
 dnl Get the path to the standard C++ library
-PFK_CXX_LIB_PATH
+#PFK_CXX_LIB_PATH
 
 dnl check STD C++ library
 AC_CHECK_LIB(stdc++, main, LIBSTDCPP="lstdc++", LIBSTDCPP=)
@@ -32,7 +32,7 @@ dnl substitute this value
 AC_SUBST(LIBSTDCPP)
 
 dnl Turn on -Wall if compiling with gcc
-AC_COMPILE_WARNINGS
+#AC_COMPILE_WARNINGS
 
 dnl Check for gmake and use it
 AC_CHECK_PROG(GMAKE, gmake, gmake, make)

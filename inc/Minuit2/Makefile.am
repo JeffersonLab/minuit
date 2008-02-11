@@ -4,7 +4,7 @@
 #
 
 # The following is set; otherwise it would follow GNU conventions.
-AUTOMAKE_OPTIONS = foreign
+#AUTOMAKE_OPTIONS = foreign
 
 minuitdir = $(includedir)/Minuit2
 

@@ -4,12 +4,12 @@
 #
 
 # The following is set; otherwise it would follow GNU conventions.
-AUTOMAKE_OPTIONS = foreign
+#AUTOMAKE_OPTIONS = foreign
 
 # The convenience library to be built.
-lib_LTLIBRARIES = libMinuit2Base.la
+lib_LIBRARIES = libMinuit2Base.a
 
-libMinuit2Base_la_SOURCES =				\
+libMinuit2Base_a_SOURCES =				\
          AnalyticalGradientCalculator.cxx	\
          BasicMinimumError.cxx			\
          CombinedMinimumBuilder.cxx		\
@@ -83,7 +83,7 @@ INCLUDES =					\
 	-I$(top_srcdir)/inc
 
 # For platforms where automake dependency generation doesn't work.
-depend: $(libMinuit2Base_la_SOURCES)
+depend: $(libMinuit2Base_a_SOURCES)
 	$(top_srcdir)/config/makedepend $(DEFS) $(INCLUDES) $(CPPFLAGS) $?
 
 # An extra clean target for the Sun CC compiler.

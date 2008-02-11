@@ -4,7 +4,7 @@
 #
 
 # The following is set, otherwise it would have to follow GNU conventions.
-AUTOMAKE_OPTIONS = foreign
+#AUTOMAKE_OPTIONS = foreign
 
 # A trick to add options to the aclocal command.
 ACLOCAL = aclocal -I config/m4
