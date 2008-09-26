@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnUserTransformation.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Name:  $:$Id: MnUserTransformation.cxx,v 1.2 2008/09/26 14:51:33 edwards Exp $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -11,6 +11,8 @@
 #include "Minuit2/MnUserCovariance.h"
 
 #include <algorithm>
+
+#include <stdio.h>
 
 namespace ROOT {
 
@@ -47,7 +49,7 @@ MnUserTransformation::MnUserTransformation(const std::vector<double>& par, const
    p[0] = 'p';
    p[4] = '\0';
    for(unsigned int i = 0; i < par.size(); i++) {
-      std::sprintf(p+1,"%i",i);
+      sprintf(p+1,"%i",i);
       Add(p, par[i], err[i]);
    }
 }
