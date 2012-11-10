@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FumiliMaximumLikelihoodFCN.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: FumiliMaximumLikelihoodFCN.h 34992 2010-08-25 10:36:11Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -14,6 +14,7 @@
 #include <vector>
 #include <cmath>
 #include <float.h>
+#include "Minuit2/ParametricFunction.h"
 
 namespace ROOT {
 

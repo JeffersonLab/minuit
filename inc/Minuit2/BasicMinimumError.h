@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: BasicMinimumError.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: BasicMinimumError.h 29242 2009-06-26 11:01:45Z brun $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -56,7 +56,7 @@ public:
     fMatrix(mat), fDCovar(1.), fValid(false), fPosDef(false), fMadePosDef(false), fHesseFailed(true), fInvertFailed(false), fAvailable(true) {}
 
   BasicMinimumError(const MnAlgebraicSymMatrix& mat, MnMadePosDef) : 
-    fMatrix(mat), fDCovar(1.), fValid(false), fPosDef(false), fMadePosDef(true), fHesseFailed(false), fInvertFailed(false), fAvailable(true) {}
+    fMatrix(mat), fDCovar(1.), fValid(true), fPosDef(false), fMadePosDef(true), fHesseFailed(false), fInvertFailed(false), fAvailable(true) {}
 
   BasicMinimumError(const MnAlgebraicSymMatrix& mat, MnInvertFailed) : 
     fMatrix(mat), fDCovar(1.), fValid(false), fPosDef(true), fMadePosDef(false), fHesseFailed(false), fInvertFailed(true), fAvailable(true) {}

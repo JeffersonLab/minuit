@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: GaussFcn2.h,v 1.1 2008/02/09 21:56:15 edwards Exp $
+// @(#)root/minuit2:$Id: GaussFcn2.h 20880 2007-11-19 11:23:41Z rdm $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************

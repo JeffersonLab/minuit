@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: Quad4FMain.cxx,v 1.1 2008/02/09 21:56:15 edwards Exp $
+// @(#)root/minuit2:$Id: Quad4FMain.cxx 24400 2008-06-20 07:28:49Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -10,6 +10,7 @@
 #include "Quad4F.h"
 #include "Minuit2/FunctionMinimum.h"
 #include "Minuit2/MnMigrad.h"
+#include "Minuit2/MnHesse.h"
 #include "Minuit2/MnUserParameters.h"
 #include "Minuit2/MnPrint.h"
 // #include "TimingUtilities/PentiumTimer.h"
@@ -41,6 +42,26 @@ int main() {
   FunctionMinimum min = migrad();
   std::cout<<"minimum: "<<min<<std::endl;
   }
+  {
+     // use analytical derivatives 
+     Quad4FGrad gfcn;
+
+     MnUserParameters upar;
+     upar.Add("x", 1., 0.1);
+     upar.Add("y", 1., 0.1);
+     upar.Add("z", 1., 0.1);
+     upar.Add("w", 1., 0.1);
+
+     MnMigrad migrad(gfcn, upar);
+     FunctionMinimum min = migrad();
+     std::cout<<"minimum with grad calculation : "<<min<<std::endl;
+
+     // try to run hesse 
+     MnHesse hesse; 
+     hesse( gfcn, min); 
+     std::cout<<"minimum after hesse: "<<min<<std::endl;
+  }
+
 //   stop = stopwatch.lap().ticks();
 //   std::cout<<"stop-start: "<<stop - start<<std::endl;
 /*

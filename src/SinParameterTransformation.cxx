@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: SinParameterTransformation.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: SinParameterTransformation.cxx 28280 2009-04-20 14:08:59Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -51,7 +51,7 @@ double SinParameterTransformation::Ext2int(double Value, double Upper, double Lo
 
 double SinParameterTransformation::DInt2Ext(double Value, double Upper, double Lower) const {
    // return the derivative of the transformation d Ext/ d Int
-   return 0.5*fabs((Upper - Lower)*cos(Value));
+   return 0.5*((Upper - Lower)*cos(Value));
 }
 
    }  // namespace Minuit2

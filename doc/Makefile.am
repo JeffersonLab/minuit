@@ -1,5 +1,5 @@
 # 
-# $Id: Makefile.am,v 1.2 2008/02/11 05:26:58 edwards Exp $
+# $Id: doc_Makefile.am,v 1.1 2005/11/29 17:52:18 moneta Exp $
 #
 # Author: Paul_Kunz@slac.stanford.edu
 #
@@ -9,7 +9,7 @@
 #AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST =					\
-	Doxyfile.in
+	Minuit2.html Doxyfile.in
 
 docs:
 	if test -d html; then \

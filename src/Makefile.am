@@ -54,6 +54,7 @@ libMinuit2Base_a_SOURCES =				\
          MnUserParameters.cxx			\
          MnUserTransformation.cxx		\
          ModularFunctionMinimizer.cxx		\
+         MPIProcess.cxx                         \
          NegativeG2LineSearch.cxx		\
          Numerical2PGradientCalculator.cxx	\
          ParametricFunction.cxx                 \

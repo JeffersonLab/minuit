@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnParabolaPoint.h,v 1.1 2008/02/09 21:56:12 edwards Exp $
+// @(#)root/minuit2:$Id: MnParabolaPoint.h 23522 2008-04-24 15:09:19Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -63,7 +63,7 @@ public:
 
   */
 
-  double x() const {return fX;}
+  double X() const {return fX;}
 
 
   /**
@@ -74,7 +74,7 @@ public:
 
   */
 
-  double y() const {return fY;}
+  double Y() const {return fY;}
 
 private:
 

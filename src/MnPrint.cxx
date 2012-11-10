@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnPrint.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: MnPrint.cxx 35508 2010-09-21 08:23:57Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -23,6 +23,9 @@
 
 #include <iomanip>
 
+#define PRECISION 13
+#define WIDTH     20
+
 namespace ROOT {
 
    namespace Minuit2 {
@@ -31,31 +34,33 @@ namespace ROOT {
 std::ostream& operator<<(std::ostream& os, const LAVector& vec) {
    // print a vector
    os << "LAVector parameters:" << std::endl;
+   int pr = os.precision(PRECISION);
    { 
-      os << std::endl;
       int nrow = vec.size();
       for (int i = 0; i < nrow; i++) {
-         os.precision(8); os.width(15); 
+         os.width(WIDTH); 
          os << vec(i) << std::endl;
       }
-      os << std::endl;
    }
+   os.precision(pr);
    return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const LASymMatrix& matrix) {
    // print a matrix
    os << "LASymMatrix parameters:" << std::endl;
+   int pr = os.precision(8);
    { 
-      os << std::endl;
+      //os << std::endl;
       int n = matrix.Nrow();
       for (int i = 0; i < n; i++) {
          for (int j = 0; j < n; j++) {
-            os.precision(8); os.width(15); os << matrix(i,j);
+            os.width(15); os << matrix(i,j);
          }
          os << std::endl;
       }
    }
+   os.precision(pr);
    return os;
 }
 
@@ -66,6 +71,7 @@ std::ostream& operator<<(std::ostream& os, const MnUserParameters& par) {
    os << "# ext. |" << "|   Name    |" << "|   type  |" << "|     Value     |" << "|  Error +/- " << std::endl;
    
    os << std::endl;
+   int pr = os.precision();
    
    bool atLoLim = false;
    bool atHiLim = false;
@@ -73,12 +79,12 @@ std::ostream& operator<<(std::ostream& os, const MnUserParameters& par) {
       os << std::setw(4) << (*ipar).Number() << std::setw(5) << "||"; 
       os << std::setw(10) << (*ipar).Name()   << std::setw(3) << "||";
       if((*ipar).IsConst()) {
-         os << "  const  ||" << std::setprecision(8) << std::setw(14) << (*ipar).Value() << " ||" << std::endl;
+         os << "  const  ||" << std::setprecision(PRECISION) << std::setw(WIDTH) << (*ipar).Value() << " ||" << std::endl;
       } else if((*ipar).IsFixed()) {
-         os << "  fixed  ||" << std::setprecision(8) << std::setw(14) << (*ipar).Value() << " ||" << std::endl;
+         os << "  fixed  ||" << std::setprecision(PRECISION) << std::setw(WIDTH) << (*ipar).Value() << " ||" << std::endl;
       } else if((*ipar).HasLimits()) {
          if((*ipar).Error() > 0.) {
-            os << " limited ||" << std::setprecision(8) << std::setw(14) << (*ipar).Value();
+            os << " limited ||" << std::setprecision(PRECISION) << std::setw(WIDTH) << (*ipar).Value();
             if(fabs((*ipar).Value() - (*ipar).LowerLimit()) < par.Precision().Eps2()) {
                os <<"*";
                atLoLim = true;
@@ -89,12 +95,12 @@ std::ostream& operator<<(std::ostream& os, const MnUserParameters& par) {
             }
             os << " ||" << std::setw(12) << (*ipar).Error() << std::endl;
          } else
-            os << "  free   ||" << std::setprecision(8) << std::setw(14) << (*ipar).Value() << " ||" << std::setw(12) << "no" << std::endl;
+            os << "  free   ||" << std::setprecision(PRECISION) << std::setw(WIDTH) << (*ipar).Value() << " ||" << std::setw(12) << "no" << std::endl;
       } else {
          if((*ipar).Error() > 0.)
-            os << "  free   ||" << std::setprecision(8) << std::setw(14) << (*ipar).Value() << " ||" << std::setw(12) << (*ipar).Error() << std::endl;
+            os << "  free   ||" << std::setprecision(PRECISION) << std::setw(WIDTH) << (*ipar).Value() << " ||" << std::setw(12) << (*ipar).Error() << std::endl;
          else
-            os << "  free   ||" << std::setprecision(8) << std::setw(14) << (*ipar).Value() << " ||" << std::setw(12) << "no" << std::endl;
+            os << "  free   ||" << std::setprecision(PRECISION) << std::setw(WIDTH) << (*ipar).Value() << " ||" << std::setw(12) << "no" << std::endl;
          
       }
    }
@@ -102,6 +108,7 @@ std::ostream& operator<<(std::ostream& os, const MnUserParameters& par) {
    if(atLoLim) os << "* Parameter is at Lower limit" << std::endl;
    if(atHiLim) os << "** Parameter is at Upper limit" << std::endl;
    os << std::endl;
+   os.precision(pr);
    
    return os;
 }
@@ -111,18 +118,18 @@ std::ostream& operator<<(std::ostream& os, const MnUserCovariance& matrix) {
    os << std::endl;
    
    os << "MnUserCovariance: " << std::endl;
-   
+   int pr = os.precision(6);
    { 
       os << std::endl;
       unsigned int n = matrix.Nrow();
       for (unsigned int i = 0; i < n; i++) {
          for (unsigned int j = 0; j < n; j++) {
-            os.precision(6); os.width(13); os << matrix(i,j);
+            os.width(13); os << matrix(i,j);
          }
          os << std::endl;
       }
    }
-   
+
    os << std::endl;
    os << "MnUserCovariance Parameter correlations: " << std::endl;
    
@@ -133,12 +140,13 @@ std::ostream& operator<<(std::ostream& os, const MnUserCovariance& matrix) {
          double di = matrix(i,i);
          for (unsigned int j = 0; j < n; j++) {
             double dj = matrix(j,j);	
-            os.precision(6); os.width(13); os << matrix(i,j)/sqrt(fabs(di*dj));
+            os.width(13); os << matrix(i,j)/sqrt(fabs(di*dj));
          }
          os << std::endl;
       }
    }
    
+   os.precision(pr);
    return os;   
 }
 
@@ -147,15 +155,16 @@ std::ostream& operator<<(std::ostream& os, const MnGlobalCorrelationCoeff& coeff
    os << std::endl;
    
    os << "MnGlobalCorrelationCoeff: " << std::endl;
-   
+   int pr =  os.precision(6);
    { 
       os << std::endl;
       for (unsigned int i = 0; i < coeff.GlobalCC().size(); i++) {
-         os.precision(6); os.width(13); os << coeff.GlobalCC()[i];
+         os.width(13); os << coeff.GlobalCC()[i];
          os << std::endl;
       }
    }
    
+   os.precision(pr);
    return os;   
 }
 
@@ -168,10 +177,11 @@ std::ostream& operator<<(std::ostream& os, const MnUserParameterState& state) {
       os <<"WARNING: MnUserParameterState is not valid."<<std::endl;
       os << std::endl;
    }
+   int pr = os.precision(PRECISION);
    
    os <<"# of function calls: "<<state.NFcn()<<std::endl;
-   os <<"function Value: "<< std::setprecision(12) << state.Fval()<<std::endl;
-   os <<"expected distance to the Minimum (edm): "<< std::setprecision(8) << state.Edm()<<std::endl;
+   os <<"function Value: " << state.Fval()<<std::endl;
+   os <<"expected distance to the Minimum (edm): " << state.Edm()<<std::endl;
    os <<"external parameters: "<<state.Parameters()<<std::endl;
    if(state.HasCovariance())
       os <<"covariance matrix: "<<state.Covariance()<<std::endl;
@@ -182,7 +192,8 @@ std::ostream& operator<<(std::ostream& os, const MnUserParameterState& state) {
       os <<"WARNING: MnUserParameterState is not valid."<<std::endl;
    
    os << std::endl;
-   
+   os.precision(pr);
+
    return os;
 } 
 
@@ -190,47 +201,48 @@ std::ostream& operator<<(std::ostream& os, const FunctionMinimum& min) {
    // print the FunctionMinimum
    os << std::endl;
    if(!min.IsValid()) {
-      os << std::endl;
       os <<"WARNING: Minuit did not converge."<<std::endl;
       os << std::endl;
    } else {
-      os << std::endl;
       os <<"Minuit did successfully converge."<<std::endl;
-      os << std::endl;
    }
+   int pr = os.precision(PRECISION);
    
    os <<"# of function calls: "<<min.NFcn()<<std::endl;
-   os <<"minimum function Value: "<< std::setprecision(12) << min.Fval()<<std::endl;
-   os <<"minimum edm: "<< std::setprecision(8) << min.Edm()<<std::endl;
+   os <<"minimum function Value: "  << min.Fval()<<std::endl;
+   os <<"minimum edm: "  << min.Edm()<<std::endl;
    os <<"minimum internal state vector: "<<min.Parameters().Vec()<<std::endl;
    if(min.HasValidCovariance()) 
       os <<"minimum internal covariance matrix: "<<min.Error().Matrix()<<std::endl;
    
    os << min.UserParameters() << std::endl;
-   os << min.UserCovariance() << std::endl;
-   os << min.UserState().GlobalCC() << std::endl;
+   //os << min.UserCovariance() << std::endl;
+   //os << min.UserState().GlobalCC() << std::endl;
    
    if(!min.IsValid())
       os <<"WARNING: FunctionMinimum is invalid."<<std::endl;
    
    os << std::endl;
-   
+   os.precision(pr);
+
    return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const MinimumState& min) {
    
    os << std::endl;
+   int pr = os.precision(PRECISION);
    
-   os <<"minimum function Value: "<< std::setprecision(12) << min.Fval()<<std::endl;
-   os <<"minimum edm: "<< std::setprecision(8) << min.Edm()<<std::endl;
+   os <<"minimum function Value: "  << min.Fval()<<std::endl;
+   os <<"minimum edm: " << min.Edm()<<std::endl;
    os <<"minimum internal state vector: "<<min.Vec()<<std::endl;
    os <<"minimum internal Gradient vector: "<<min.Gradient().Vec()<<std::endl;
    if(min.HasCovariance()) 
       os <<"minimum internal covariance matrix: "<<min.Error().Matrix()<<std::endl;
    
    os << std::endl;
-   
+   os.precision(pr);
+
    return os;
 }
 
@@ -238,9 +250,11 @@ std::ostream& operator<<(std::ostream& os, const MnMachinePrecision& prec) {
    // print the Precision
    os << std::endl;
    
+   int pr = os.precision(PRECISION);
    os <<"current machine precision is set to "<<prec.Eps()<<std::endl;
    
    os << std::endl;
+   os.precision(pr);
    
    return os;
 }
@@ -273,14 +287,17 @@ std::ostream& operator<<(std::ostream& os, const MinosError& me) {
       os << "Minos found a new Minimum in positive direction."<<std::endl;
       os << me.UpperState() <<std::endl;
    }
+
+   int pr = os.precision();
    
    os << "# ext. |" << "|   Name    |" << "|   Value@min   |" << "|    negative   |" << "|   positive  " << std::endl;
    os << std::setw(4) << me.Parameter() << std::setw(5) << "||"; 
    os << std::setw(10) << me.LowerState().Name(me.Parameter()) << std::setw(3) << "||";
-   os << std::setprecision(8) << std::setw(14) << me.Min() << " ||" << std::setprecision(8) << std::setw(14) << me.Lower() << " ||" << std::setw(14) << me.Upper() << std::endl;
+   os << std::setprecision(PRECISION) << std::setw(WIDTH) << me.Min() << " ||" << std::setprecision(PRECISION) << std::setw(WIDTH) << me.Lower() << " ||" << std::setw(WIDTH) << me.Upper() << std::endl;
    
    os << std::endl;
-   
+   os.precision(pr);
+
    return os;
 }
 

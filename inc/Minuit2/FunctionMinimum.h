@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FunctionMinimum.h,v 1.1 2008/02/09 21:56:12 edwards Exp $
+// @(#)root/minuit2:$Id: FunctionMinimum.h 23654 2008-05-06 07:30:34Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -12,12 +12,17 @@
 
 #include "Minuit2/BasicFunctionMinimum.h"
 
+#ifdef G__DICTIONARY
+typedef ROOT::Minuit2::MinimumState MinimumState; 
+#endif
+
 namespace ROOT {
 
    namespace Minuit2 {
 
-
-/** result of the minimization; 
+//______________________________________________________________________________________________
+/** 
+    class holding the full result of the minimization; 
     both internal and external (MnUserParameterState) representation available
     for the parameters at the Minimum
  */
@@ -26,69 +31,77 @@ class FunctionMinimum {
 
 public:
 
-  class MnReachedCallLimit {};
-  class MnAboveMaxEdm {};
+   class MnReachedCallLimit {};
+   class MnAboveMaxEdm {};
 
 public:
-  
-  FunctionMinimum(const MinimumSeed& seed, double up) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, up))) {}
-  
-  FunctionMinimum(const MinimumSeed& seed, const std::vector<MinimumState>& states, double up) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, states, up))) {}
-  
-  FunctionMinimum(const MinimumSeed& seed, const std::vector<MinimumState>& states, double up, MnReachedCallLimit) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, states, up, BasicFunctionMinimum::MnReachedCallLimit()))) {}
-  
-  FunctionMinimum(const MinimumSeed& seed, const std::vector<MinimumState>& states, double up, MnAboveMaxEdm) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, states, up, BasicFunctionMinimum::MnAboveMaxEdm()))) {}
+   
 
-  FunctionMinimum(const FunctionMinimum& min) : fData(min.fData) {}
+   /// constructor from only MinimumSeed. Minimum is only from seed result not full minimization 
+   FunctionMinimum(const MinimumSeed& seed, double up) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, up))) {}
   
-  FunctionMinimum& operator=(const FunctionMinimum& min) {
-    fData = min.fData;
-    return *this;
-  }
+   /// constructor at the end of a successfull minimization from seed and vector of states 
+   FunctionMinimum(const MinimumSeed& seed, const std::vector<MinimumState>& states, double up) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, states, up))) {}
   
-  ~FunctionMinimum() {}
+   /// constructor at the end of a failed minimization due to exceeding function call limit 
+   FunctionMinimum(const MinimumSeed& seed, const std::vector<MinimumState>& states, double up, MnReachedCallLimit) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, states, up, BasicFunctionMinimum::MnReachedCallLimit()))) {}
   
-  // why not
-  void Add(const MinimumState& state) {fData->Add(state);}
+   /// constructor at the end of a failed minimization due to edm above maximum value
+   FunctionMinimum(const MinimumSeed& seed, const std::vector<MinimumState>& states, double up, MnAboveMaxEdm) : fData(MnRefCountedPointer<BasicFunctionMinimum>(new BasicFunctionMinimum(seed, states, up, BasicFunctionMinimum::MnAboveMaxEdm()))) {}
 
-  const MinimumSeed& Seed() const {return fData->Seed();}
-  const std::vector<MinimumState>& States() const {return fData->States();}
+   /// copy constructo
+   FunctionMinimum(const FunctionMinimum& min) : fData(min.fData) {}
+  
+   FunctionMinimum& operator=(const FunctionMinimum& min) {
+      fData = min.fData;
+      return *this;
+   }
+  
+   ~FunctionMinimum() {}
+  
+   // why not
+   void Add(const MinimumState& state) {fData->Add(state);}
+
+   const MinimumSeed& Seed() const {return fData->Seed();}
+   const std::vector<ROOT::Minuit2::MinimumState>& States() const {return fData->States();}
 
 // user representation of state at Minimum
-  const MnUserParameterState& UserState() const {
-    return fData->UserState();
-  }
-  const MnUserParameters& UserParameters() const {
-    return fData->UserParameters();
-  }
-  const MnUserCovariance& UserCovariance() const {
-    return fData->UserCovariance();
-  }
+   const MnUserParameterState& UserState() const {
+      return fData->UserState();
+   }
+   const MnUserParameters& UserParameters() const {
+      return fData->UserParameters();
+   }
+   const MnUserCovariance& UserCovariance() const {
+      return fData->UserCovariance();
+   }
 
 // forward interface of last state
-  const MinimumState& State() const {return fData->State();}
-  const MinimumParameters& Parameters() const {return fData->Parameters();}
-  const MinimumError& Error() const {return fData->Error();}
-  const FunctionGradient& Grad() const {return fData->Grad();}
-  double Fval() const {return fData->Fval();}
-  double Edm() const {return fData->Edm();}
-  int NFcn() const {return fData->NFcn();}  
+   const MinimumState& State() const {return fData->State();}
+   const MinimumParameters& Parameters() const {return fData->Parameters();}
+   const MinimumError& Error() const {return fData->Error();}
+   const FunctionGradient& Grad() const {return fData->Grad();}
+   double Fval() const {return fData->Fval();}
+   double Edm() const {return fData->Edm();}
+   int NFcn() const {return fData->NFcn();}  
   
-  double Up() const {return fData->Up();}
-  bool IsValid() const {return fData->IsValid();}
-  bool HasValidParameters() const {return fData->HasValidParameters();}
-  bool HasValidCovariance() const {return fData->HasValidCovariance();}
-  bool HasAccurateCovar() const {return fData->HasAccurateCovar();}
-  bool HasPosDefCovar() const {return fData->HasPosDefCovar();}
-  bool HasMadePosDefCovar() const {return fData->HasMadePosDefCovar();}
-  bool HesseFailed() const {return fData->HesseFailed();}
-  bool HasCovariance() const {return fData->HasCovariance();}
-  bool IsAboveMaxEdm() const {return fData->IsAboveMaxEdm();}
-  bool HasReachedCallLimit() const {return fData->HasReachedCallLimit();}
+   double Up() const {return fData->Up();}
+   bool IsValid() const {return fData->IsValid();}
+   bool HasValidParameters() const {return fData->HasValidParameters();}
+   bool HasValidCovariance() const {return fData->HasValidCovariance();}
+   bool HasAccurateCovar() const {return fData->HasAccurateCovar();}
+   bool HasPosDefCovar() const {return fData->HasPosDefCovar();}
+   bool HasMadePosDefCovar() const {return fData->HasMadePosDefCovar();}
+   bool HesseFailed() const {return fData->HesseFailed();}
+   bool HasCovariance() const {return fData->HasCovariance();}
+   bool IsAboveMaxEdm() const {return fData->IsAboveMaxEdm();}
+   bool HasReachedCallLimit() const {return fData->HasReachedCallLimit();}
+
+   void SetErrorDef( double up) { return fData->SetErrorDef(up);}
 
 private:
 
-  MnRefCountedPointer<BasicFunctionMinimum> fData;
+   MnRefCountedPointer<BasicFunctionMinimum> fData;
 };
 
   }  // namespace Minuit2

@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: ABProd.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: ABProd.h 23970 2008-05-22 13:37:25Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -26,8 +26,8 @@ private:
 
   ABProd& operator=(const ABProd&) {return *this;}
 
-  template<class A, class B>
-  ABProd& operator=(const ABProd<A,B>&) {return *this;}
+  template<class MI1, class MI2>
+  ABProd& operator=(const ABProd<MI1,MI2>&) {return *this;}
   
 public:
 
@@ -37,11 +37,11 @@ public:
 
   ABProd(const ABProd& prod) : fA(prod.fA), fB(prod.fB) {}
 
-  template<class A, class B>
-  ABProd(const ABProd<A,B>& prod) : fA(M1(prod.fA)), fB(M2(prod.fB)) {}
+  template<class MI1, class MI2>
+  ABProd(const ABProd<MI1,MI2>& prod) : fA(M1(prod.A() )), fB(M2(prod.B() )) {}
 
-  const M1& a() const {return fA;}
-  const M2& b() const {return fB;}
+  const M1& A() const {return fA;}
+  const M2& B() const {return fB;}
  
 private:
 

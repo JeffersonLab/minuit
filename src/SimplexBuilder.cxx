@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: SimplexBuilder.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: SimplexBuilder.cxx 23654 2008-05-06 07:30:34Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -27,7 +27,7 @@ namespace ROOT {
 //#define DEBUG 1
 
 FunctionMinimum SimplexBuilder::Minimum(const MnFcn& mfcn, const GradientCalculator&, const MinimumSeed& seed, const MnStrategy&, unsigned int maxfcn, double minedm) const {
-   // find the minimum using the Simplex method of Nelder and Mead
+   // find the minimum using the Simplex method of Nelder and Mead (does not use function gradient)
    // method to find initial simplex is slightly different than in the orginal Fortran 
    // Minuit since has not been proofed that one to be better
    

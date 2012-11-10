@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: ABSum.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: ABSum.h 23970 2008-05-22 13:37:25Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -26,8 +26,8 @@ private:
 
   ABSum& operator=(const ABSum&) {return *this;}
 
-  template<class A, class B>
-  ABSum& operator=(const ABSum<A,B>&) {return *this;}
+  template<class MI1, class MI2>
+  ABSum& operator=(const ABSum<MI1,MI2>&) {return *this;}
 
 public:
 
@@ -37,11 +37,11 @@ public:
 
   ABSum(const ABSum& sum) : fA(sum.fA), fB(sum.fB) {}
 
-  template<class A, class B>
-  ABSum(const ABSum<A,B>& sum) : fA(M1(sum.fA)), fB(M2(sum.fB)) {}
+  template<class MI1, class MI2>
+  ABSum(const ABSum<MI1,MI2>& sum) : fA(M1(sum.A() )), fB(M2(sum.B() )) {}
 
-  const M1& a() const {return fA;}
-  const M2& b() const {return fB;}
+  const M1& A() const {return fA;}
+  const M2& B() const {return fB;}
 
 private:
 

@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FunctionMinimizer.h,v 1.1 2008/02/09 21:56:12 edwards Exp $
+// @(#)root/minuit2:$Id: FunctionMinimizer.h 21530 2007-12-20 11:14:35Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -23,7 +23,7 @@ class FCNBase;
 class FCNGradientBase;
 class FunctionMinimum;
 
-
+//_____________________________________________________________________________________
 /** base class for function minimizers; user may give FCN or FCN with Gradient,
     Parameter starting values and initial Error guess (sigma) (or "step size"),
     or Parameter starting values and initial covariance matrix; 
@@ -37,19 +37,19 @@ class FunctionMinimizer {
 
 public:
   
-  virtual ~FunctionMinimizer() {}
+   virtual ~FunctionMinimizer() {}
 
-  //starting values for parameters and errors
-  virtual FunctionMinimum Minimize(const FCNBase&, const std::vector<double>& par, const std::vector<double>& err, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
+   //starting values for parameters and errors
+   virtual FunctionMinimum Minimize(const FCNBase&, const std::vector<double>& par, const std::vector<double>& err, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
 
-  //starting values for parameters and errors and FCN with Gradient
-  virtual FunctionMinimum Minimize(const FCNGradientBase&, const std::vector<double>& par, const std::vector<double>& err, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
+   //starting values for parameters and errors and FCN with Gradient
+   virtual FunctionMinimum Minimize(const FCNGradientBase&, const std::vector<double>& par, const std::vector<double>& err, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
 
-  //starting values for parameters and covariance matrix
-  virtual FunctionMinimum Minimize(const FCNBase&, const std::vector<double>& par, unsigned int nrow, const std::vector<double>& cov, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
+   //starting values for parameters and covariance matrix
+   virtual FunctionMinimum Minimize(const FCNBase&, const std::vector<double>& par, unsigned int nrow, const std::vector<double>& cov, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
 
-  //starting values for parameters and covariance matrix and FCN with Gradient
-  virtual FunctionMinimum Minimize(const FCNGradientBase&, const std::vector<double>& par, unsigned int nrow, const std::vector<double>& cov, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
+   //starting values for parameters and covariance matrix and FCN with Gradient
+   virtual FunctionMinimum Minimize(const FCNGradientBase&, const std::vector<double>& par, unsigned int nrow, const std::vector<double>& cov, unsigned int strategy, unsigned int maxfcn, double toler) const = 0; 
 
 };
 

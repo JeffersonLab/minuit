@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnParameterScan.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: MnParameterScan.cxx 26866 2008-12-12 10:50:07Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -22,7 +22,7 @@ MnParameterScan::MnParameterScan(const FCNBase& fcn, const MnUserParameters& par
 std::vector<std::pair<double, double> > MnParameterScan::operator()(unsigned int par, unsigned int maxsteps, double low, double high) {
    // do the scan for parameter par between low and high values 
    
-   if(maxsteps > 101) maxsteps = 101;
+   //if(maxsteps > 101) maxsteps = 101;
    std::vector<std::pair<double, double> > result; result.reserve(maxsteps+1);
    std::vector<double> params = fParameters.Params();
    result.push_back(std::pair<double, double>(params[par], fAmin));

@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: SimplexParameters.h,v 1.1 2008/02/09 21:56:13 edwards Exp $
+// @(#)root/minuit2:$Id: SimplexParameters.h 21114 2007-11-29 17:16:45Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -9,6 +9,8 @@
 
 #ifndef ROOT_Minuit2_SimplexParameters
 #define ROOT_Minuit2_SimplexParameters
+
+#include <cassert>
 
 #include "Minuit2/MnMatrix.h"
 

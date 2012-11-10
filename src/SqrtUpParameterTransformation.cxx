@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: SqrtUpParameterTransformation.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: SqrtUpParameterTransformation.cxx 29068 2009-06-17 16:28:51Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -29,19 +29,19 @@ double SqrtUpParameterTransformation::Int2ext(double value, double upper) const 
 }
 
 
-double SqrtUpParameterTransformation::Ext2int(double value, double upper, const MnMachinePrecision& prec) const {
+double SqrtUpParameterTransformation::Ext2int(double value, double upper, const MnMachinePrecision& ) const {
    // external to internal transformation  
    double yy = upper - value + 1.; 
    double yy2 = yy*yy; 
-   if (yy2 < (1. + prec.Eps2()) ) 
-      return 8*sqrt(prec.Eps2()); 
+   if (yy2 < 1.  ) 
+      return 0; 
    else 
       return sqrt( yy2 -1); 
 }
 
 
 double SqrtUpParameterTransformation::DInt2Ext(double value, double) const {
-   // derivative of internal to external transofrmation :  d Ext / d Int   
+   // derivative of internal to external transofrmation :  d (Int2Ext ) / d Int   
    double val = - value/( sqrt( value*value + 1.) );
    return val; 
 }

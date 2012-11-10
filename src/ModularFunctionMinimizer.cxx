@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: ModularFunctionMinimizer.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: ModularFunctionMinimizer.cxx 23654 2008-05-06 07:30:34Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -25,8 +25,6 @@
 #include "Minuit2/MnHesse.h"
 #include "Minuit2/MnLineSearch.h"
 #include "Minuit2/MnParabolaPoint.h"
-#include "Minuit2/FumiliFCNBase.h"
-#include "Minuit2/FumiliGradientCalculator.h"
 
 namespace ROOT {
 

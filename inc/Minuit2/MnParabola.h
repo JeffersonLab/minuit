@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnParabola.h,v 1.1 2008/02/09 21:56:12 edwards Exp $
+// @(#)root/minuit2:$Id: MnParabola.h 23522 2008-04-24 15:09:19Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -59,7 +59,7 @@ public:
 
   */
 
-  double y(double x) const {return (fA*x*x + fB*x +fC);}
+  double Y(double x) const {return (fA*x*x + fB*x +fC);}
 
 
   /**
@@ -135,7 +135,7 @@ public:
 
    */
 
-  double a() const {return fA;}
+  double A() const {return fA;}
 
 
   /**
@@ -146,7 +146,7 @@ public:
 
   */
 
-  double b() const {return fB;}
+  double B() const {return fB;}
 
 
   /**
@@ -157,7 +157,7 @@ public:
 
   */
 
-  double c() const {return fC;}
+  double C() const {return fC;}
 
 private:
 

@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FumiliFCNBase.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: FumiliFCNBase.h 34992 2010-08-25 10:36:11Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -11,13 +11,14 @@
 #define ROOT_Minuit2_FumiliFCNBase
 
 #include "Minuit2/FCNBase.h"
-#include "Minuit2/ParametricFunction.h"
+#include <cassert>
 
 namespace ROOT {
 
    namespace Minuit2 {
 
 
+//____________________________________________________________________________________________
 /** 
  
 Extension of the FCNBase for the Fumili method. Fumili applies only to 
@@ -47,26 +48,31 @@ class FumiliFCNBase : public FCNBase {
 
 public:
 
-  /**
-     Default Constructor. Need in this case to create when implementing EvaluateAll the Gradient and Hessian vectors with the right size
-  */
+   /**
+      Default Constructor. Need in this case to create when implementing EvaluateAll the Gradient and Hessian vectors with the right size
+   */
 
-  FumiliFCNBase()  : fNumberOfParameters(0) {}
+   FumiliFCNBase()  : 
+      fNumberOfParameters(0), 
+      fValue(0)
+   {}
 
-  /**
+   /**
 
-  Constructor which initializes the class with the function provided by the
-  user for modeling the data.
+      Constructor which initializes the class with the function provided by the
+      user for modeling the data.
 
-  @param npar the number of parameters 
+      @param npar the number of parameters 
 
-  */
+   */
 
 
-  FumiliFCNBase(unsigned int npar) 
-  {
-    InitAndReset(npar);
-  }
+   FumiliFCNBase(unsigned int npar) : 
+      fNumberOfParameters(npar),
+      fValue(0),
+      fGradient(std::vector<double>(npar)), 
+      fHessian(std::vector<double>(static_cast<int>( 0.5*npar*(npar+1) )) )            
+   {}
 
 
 
@@ -74,91 +80,85 @@ public:
 
 
 
-  virtual ~FumiliFCNBase() {}
+   virtual ~FumiliFCNBase() {}
 
 
 
 
-  /**
+   /**
   
-  Evaluate function Value, Gradient and Hessian using Fumili approximation, for values of parameters p
-  The resul is cached inside and is return from the FumiliFCNBase::Value ,  FumiliFCNBase::Gradient and 
-  FumiliFCNBase::Hessian methods 
+      Evaluate function Value, Gradient and Hessian using Fumili approximation, for values of parameters p
+      The resul is cached inside and is return from the FumiliFCNBase::Value ,  FumiliFCNBase::Gradient and 
+      FumiliFCNBase::Hessian methods 
 
-  @param par vector of parameters
+      @param par vector of parameters
 
-  **/
+   **/
 
-  virtual  void EvaluateAll( const std::vector<double> & par ) = 0; 
+   virtual  void EvaluateAll( const std::vector<double> & par ) = 0; 
 
 
-  /**
-   Return cached Value of objective function estimated previously using the  FumiliFCNBase::EvaluateAll method
+   /**
+      Return cached Value of objective function estimated previously using the  FumiliFCNBase::EvaluateAll method
 
-  **/
+   **/
 
-  virtual double Value() const { return fValue; } 
+   virtual double Value() const { return fValue; } 
 
-  /**
-   Return cached Value of function Gradient estimated previously using the  FumiliFCNBase::EvaluateAll method
-  **/
+   /**
+      Return cached Value of function Gradient estimated previously using the  FumiliFCNBase::EvaluateAll method
+   **/
 
-  virtual const std::vector<double> & Gradient() const { return fGradient; }
+   virtual const std::vector<double> & Gradient() const { return fGradient; }
 
-  /**
-   Return Value of the i-th j-th element of the Hessian matrix estimated previously using the  FumiliFCNBase::EvaluateAll method
-   @param row row Index of the matrix
-   @param col col Index of the matrix
-  **/
+   /**
+      Return Value of the i-th j-th element of the Hessian matrix estimated previously using the  FumiliFCNBase::EvaluateAll method
+      @param row row Index of the matrix
+      @param col col Index of the matrix
+   **/
 
-  virtual double Hessian(unsigned int row, unsigned int col) const { 
-    assert( row < fGradient.size() && col < fGradient.size() ); 
-    if(row > col) 
-      return fHessian[col+row*(row+1)/2];
-    else
-      return fHessian[row+col*(col+1)/2];    
-  }
+   virtual double Hessian(unsigned int row, unsigned int col) const { 
+      assert( row < fGradient.size() && col < fGradient.size() ); 
+      if(row > col) 
+         return fHessian[col+row*(row+1)/2];
+      else
+         return fHessian[row+col*(col+1)/2];    
+   }
 
-  /**
-     return number of function variable (parameters) , i.e. function dimension
+   /**
+      return number of function variable (parameters) , i.e. function dimension
    */
 
-  virtual unsigned int Dimension() { return fNumberOfParameters; }
+   virtual unsigned int Dimension() { return fNumberOfParameters; }
 
 protected : 
 
-  /**
-     initialize and reset values of gradien and Hessian
+   /**
+      initialize and reset values of gradien and Hessian
    */
 
-  virtual void InitAndReset(unsigned int npar) {
-    fNumberOfParameters = npar;
-    fGradient = std::vector<double>(npar); 
-    fHessian = std::vector<double>(static_cast<int>( 0.5*npar*(npar+1) ));      
-  }
+   virtual void InitAndReset(unsigned int npar) {
+      fNumberOfParameters = npar;
+      fGradient = std::vector<double>(npar); 
+      fHessian = std::vector<double>(static_cast<int>( 0.5*npar*(npar+1) ));      
+   }
 
-  // methods to be used by the derived classes to set the values 
-  void SetFCNValue(double Value) { fValue = Value; }
+   // methods to be used by the derived classes to set the values 
+   void SetFCNValue(double value) { fValue = value; }
 
-  std::vector<double> & Gradient() { return fGradient; }
+   std::vector<double> & Gradient() { return fGradient; }
 
-  std::vector<double> & Hessian() { return fHessian; }
+   std::vector<double> & Hessian() { return fHessian; }
 
 
 
- private:
 
-  // A pointer to the model function which describes the data
-  const ParametricFunction *fModelFunction;
+private: 
 
-  // define these data members protected because can be modified by the derived classes 
-
- private: 
-
-  double fValue; 
-  std::vector<double> fGradient; 
-  unsigned int fNumberOfParameters; 
-  std::vector<double> fHessian;
+   unsigned int fNumberOfParameters; 
+   double fValue; 
+   std::vector<double> fGradient; 
+   std::vector<double> fHessian;
 
 
 };

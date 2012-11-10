@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnSeedGenerator.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: MnSeedGenerator.cxx 23522 2008-04-24 15:09:19Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -31,7 +31,7 @@
 #include "Minuit2/Numerical2PGradientCalculator.h"
 #include "Minuit2/HessianGradientCalculator.h"
 
-
+//#define DEBUG
 
 #if defined(DEBUG) || defined(WARNINGMSG)
 #include "Minuit2/MnPrint.h"
@@ -48,9 +48,15 @@ namespace ROOT {
 
 
 MinimumSeed MnSeedGenerator::operator()(const MnFcn& fcn, const GradientCalculator& gc, const MnUserParameterState& st, const MnStrategy& stra) const {
+
+
    // find seed (initial minimization point) using the calculated gradient
    unsigned int n = st.VariableParameters();
    const MnMachinePrecision& prec = st.Precision();
+
+#ifdef DEBUG
+   std::cout << "MnSeedGenerator: operator() - var par = " << n << " mnfcn pointer " << &fcn << std::endl;
+#endif
    
    // initial starting values
    MnAlgebraicVector x(n);
@@ -82,9 +88,13 @@ MinimumSeed MnSeedGenerator::operator()(const MnFcn& fcn, const GradientCalculat
 #endif
       state = ng2ls(fcn, state, gc, prec);
    }
+
    
    if(stra.Strategy() == 2 && !st.HasCovariance()) {
       //calculate full 2nd derivative
+#ifdef DEBUG
+      std::cout << "MnSeedGenerator: calling MnHesse  " << std::endl;
+#endif
       MinimumState tmp = MnHesse(stra)(fcn, state, st.Trafo());
       return MinimumSeed(tmp, st.Trafo());
    }
@@ -154,8 +164,8 @@ MinimumSeed MnSeedGenerator::operator()(const MnFcn& fcn, const AnalyticalGradie
    
    if(stra.Strategy() == 2 && !st.HasCovariance()) {
       //calculate full 2nd derivative
-      MinimumState tmp = MnHesse(stra)(fcn, state, st.Trafo());
-      return MinimumSeed(tmp, st.Trafo());
+      MinimumState tmpState = MnHesse(stra)(fcn, state, st.Trafo());
+      return MinimumSeed(tmpState, st.Trafo());
    }
    
    return MinimumSeed(state, st.Trafo());

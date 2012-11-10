@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: StackAllocator.h,v 1.1 2008/02/09 21:56:13 edwards Exp $
+// @(#)root/minuit2:$Id: StackAllocator.h 34992 2010-08-25 10:36:11Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -55,7 +55,7 @@ public:
 //   enum {default_size = 1048576};
   enum {default_size = 524288};
 
-  StackAllocator() {
+   StackAllocator() :   fStack(0)  {
 #ifdef _MN_NO_THREAD_SAVE_
     //std::cout<<"StackAllocator Allocate "<<default_size<<std::endl;
     fStack = new unsigned char[default_size];

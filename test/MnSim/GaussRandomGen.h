@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: GaussRandomGen.h,v 1.2 2008/10/20 17:57:02 edwards Exp $
+// @(#)root/minuit2:$Id: GaussRandomGen.h 26442 2008-11-25 10:18:22Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -10,8 +10,8 @@
 #ifndef MN_GaussRandomGen_H_
 #define MN_GaussRandomGen_H_
 
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 
 namespace ROOT {
 
@@ -34,8 +34,8 @@ public:
 
   double operator()() const {
     //need to random variables flat in [0,1)
-    double r1 = rand()/double(RAND_MAX);
-    double r2 = rand()/double(RAND_MAX);
+    double r1 = std::rand()/double(RAND_MAX);
+    double r2 = std::rand()/double(RAND_MAX);
 
     //two possibilities to generate a random gauss variable (m=0,s=1)
     double s = sqrt(-2.*log(1.-r1))*cos(2.*M_PI*r2);

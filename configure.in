@@ -6,7 +6,7 @@ dnl
 AC_INIT(src/VariableMetricBuilder.cxx)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(Minuit2, 5.16.00)
+AM_INIT_AUTOMAKE(Minuit2, 5.28.00)
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -24,7 +24,7 @@ dnl disable static building
 
 dnl Checks for libraries.
 dnl Get the path to the standard C++ library
-#PFK_CXX_LIB_PATH
+PFK_CXX_LIB_PATH
 
 dnl check STD C++ library
 AC_CHECK_LIB(stdc++, main, LIBSTDCPP="lstdc++", LIBSTDCPP=)
@@ -40,8 +40,12 @@ AC_SUBST(GMAKE)
 
 AC_PROG_RANLIB
 
+AC_OPENMP
+CFLAGS="$CFLAGS $OPENMP_CFLAGS"
+CXXFLAGS="$CXXFLAGS $OPENMP_CXXFLAGS"
+
 dnl files to be generated 
-AC_OUTPUT(Makefile inc/Makefile inc/Minuit2/Makefile src/Makefile 
+AC_OUTPUT(Makefile inc/Makefile inc/Minuit2/Makefile inc/Math/Makefile src/Makefile 
   doc/Doxyfile doc/Makefile test/Makefile test/MnSim/Makefile 
   test/MnTutorial/Makefile )
 

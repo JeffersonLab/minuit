@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FCNGradientBase.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: FCNGradientBase.h 21530 2007-12-20 11:14:35Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -16,7 +16,7 @@ namespace ROOT {
 
    namespace Minuit2 {
 
-
+//________________________________________________________________________
 /** Extension of the FCNBase for providing the analytical Gradient of the 
     function. The user-Gradient is checked at the beginning of the 
     minimization against the Minuit internal numerical Gradient in order to 
@@ -33,12 +33,12 @@ class FCNGradientBase : public FCNBase {
 
 public:
 
-  virtual ~FCNGradientBase() {}
-
-  virtual std::vector<double> Gradient(const std::vector<double>&) const = 0;
-
-  virtual bool CheckGradient() const {return true;}
-
+   virtual ~FCNGradientBase() {}
+   
+   virtual std::vector<double> Gradient(const std::vector<double>&) const = 0;
+   
+   virtual bool CheckGradient() const {return true;}
+   
 };
 
   }  // namespace Minuit2

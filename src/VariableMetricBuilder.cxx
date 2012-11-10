@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: VariableMetricBuilder.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: VariableMetricBuilder.cxx 30749 2009-10-15 16:33:04Z brun $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -43,7 +43,10 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
    // top level function to find minimum from a given initial seed 
    // iterate on a minimum search in case of first attempt is not succesfull
    
-   edmval *= 0.0001;
+   // to be consistent with F77 Minuit
+   // in Minuit2 edm is correct and is ~ a factor of 2 smaller than F77Minuit
+   // There are also a check for convergence if (edm < 0.1 edmval for exiting the loop) 
+   edmval *= 0.0002; 
    
    
 #ifdef DEBUG
@@ -137,7 +140,7 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
       
       // end loop on iterations
       // ? need a maximum here (or max of function calls is enough ? ) 
-      // continnue iteration (re-calculate funciton Minimum if edm IS NOT sufficient) 
+      // continnue iteration (re-calculate function Minimum if edm IS NOT sufficient) 
       // no need to check that hesse calculation is done (if isnot done edm is OK anyway)
       // count the pass to exit second time when function Minimum is invalid
       // increase by 20% maxfcn for doing some more tests
@@ -204,8 +207,22 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
                 << " Newton step " << step << std::endl; 
 #endif
       
+      // check if derivatives are not zero
+      if ( inner_product(s0.Gradient().Vec(),s0.Gradient().Vec() )  <= 0 )  { 
+#ifdef DEBUG
+         std::cout << "VariableMetricBuilder: all derivatives are zero - return current status" << std::endl;
+#endif
+         break;
+      }
       
+
       double gdel = inner_product(step, s0.Gradient().Grad());
+
+#ifdef DEBUG
+      std::cout << " gdel = " << gdel << std::endl;
+#endif
+
+
       if(gdel > 0.) {
 #ifdef WARNINGMSG
          MN_INFO_MSG("VariableMetricBuilder: matrix not pos.def, gdel > 0");
@@ -227,7 +244,9 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
          }
       }
       MnParabolaPoint pp = lsearch(fcn, s0.Parameters(), step, gdel, prec);
-      if(fabs(pp.y() - s0.Fval()) < fabs(s0.Fval())*prec.Eps() ) {
+
+      // <= needed for case 0 <= 0
+      if(fabs(pp.Y() - s0.Fval()) <=  fabs(s0.Fval())*prec.Eps() ) {
 #ifdef WARNINGMSG
          MN_INFO_MSG("VariableMetricBuilder: no improvement in line search");
 #endif
@@ -240,13 +259,13 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
       }
       
 #ifdef DEBUG
-      std::cout << "Result after line search : \nx = " << pp.x() 
+      std::cout << "Result after line search : \nx = " << pp.X() 
                 << "\nOld Fval = " << s0.Fval() 
-                << "\nNew Fval = " << pp.y() 
+                << "\nNew Fval = " << pp.Y() 
                 << "\nNFcalls = " << fcn.NumOfCalls() << std::endl; 
 #endif
       
-      MinimumParameters p(s0.Vec() + pp.x()*step, pp.y());
+      MinimumParameters p(s0.Vec() + pp.X()*step, pp.Y());
       
       
       FunctionGradient g = gc(p, s0.Gradient());

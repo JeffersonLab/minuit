@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnCross.h,v 1.1 2008/02/09 21:56:12 edwards Exp $
+// @(#)root/minuit2:$Id: MnCross.h 23522 2008-04-24 15:09:19Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -33,7 +33,7 @@ public:
 
   MnCross(const  MnUserParameterState& state, unsigned int nfcn) : fValue(0.), fState(state), fNFcn(nfcn), fValid(false), fLimset(false), fMaxFcn(false), fNewMin(false) {} 
   
-  MnCross(double Value, const MnUserParameterState& state, unsigned int nfcn) : fValue(Value), fState(state), fNFcn(nfcn), fValid(true), fLimset(false), fMaxFcn(false), fNewMin(false) {}
+  MnCross(double value, const MnUserParameterState& state, unsigned int nfcn) : fValue(value), fState(state), fNFcn(nfcn), fValid(true), fLimset(false), fMaxFcn(false), fNewMin(false) {}
   
   MnCross(const MnUserParameterState& state, unsigned int nfcn, CrossParLimit) : fValue(0.), fState(state), fNFcn(nfcn), fValid(true), fLimset(true), fMaxFcn(false), fNewMin(false) {}
 

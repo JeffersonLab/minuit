@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: SimplexMinimizer.h,v 1.1 2008/02/09 21:56:13 edwards Exp $
+// @(#)root/minuit2:$Id: SimplexMinimizer.h 21530 2007-12-20 11:14:35Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -21,23 +21,28 @@ namespace ROOT {
 
    namespace Minuit2 {
 
+//_____________________________________________________________
+/**
+   Class implementing the required methods for a minimization using Simplex.
+   API is provided in the upper ROOT::Minuit2::ModularFunctionMinimizer class
+ */
 
 class SimplexMinimizer : public ModularFunctionMinimizer {
 
 public:
 
-  SimplexMinimizer() : fSeedGenerator(SimplexSeedGenerator()), 
-		       fBuilder(SimplexBuilder()) {}
+   SimplexMinimizer() : fSeedGenerator(SimplexSeedGenerator()), 
+                        fBuilder(SimplexBuilder()) {}
 
-  ~SimplexMinimizer() {}
+   ~SimplexMinimizer() {}
 
-  const MinimumSeedGenerator& SeedGenerator() const {return fSeedGenerator;}
-  const MinimumBuilder& Builder() const {return fBuilder;}
+   const MinimumSeedGenerator& SeedGenerator() const {return fSeedGenerator;}
+   const MinimumBuilder& Builder() const {return fBuilder;}
 
 private:
 
-  SimplexSeedGenerator fSeedGenerator;
-  SimplexBuilder fBuilder;
+   SimplexSeedGenerator fSeedGenerator;
+   SimplexBuilder fBuilder;
 };
 
   }  // namespace Minuit2

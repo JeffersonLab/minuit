@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnUserFcn.h,v 1.1 2008/02/09 21:56:12 edwards Exp $
+// @(#)root/minuit2:$Id: MnUserFcn.h 23654 2008-05-06 07:30:34Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -27,8 +27,8 @@ class MnUserFcn : public MnFcn {
 
 public:
 
-  MnUserFcn(const FCNBase& fcn, const MnUserTransformation& trafo) :
-    MnFcn(fcn), fTransform(trafo) {}
+   MnUserFcn(const FCNBase& fcn, const MnUserTransformation& trafo, int ncall = 0) :
+      MnFcn(fcn,ncall), fTransform(trafo) {}
 
   ~MnUserFcn() {}
 

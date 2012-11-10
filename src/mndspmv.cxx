@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: mndspmv.cxx,v 1.1 2008/02/09 21:56:13 edwards Exp $
+// @(#)root/minuit2:$Id: mndspmv.cxx 23431 2008-04-23 09:59:11Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -156,7 +156,7 @@ int Mndspmv(const char* uplo, unsigned int n, double alpha,
    
    /*     Quick return if possible. */
    
-   if (n == 0 || alpha == 0. && beta == 1.) {
+   if ( ( n == 0)  || ( alpha == 0. && beta == 1.) ) {
       return 0;
    }
    

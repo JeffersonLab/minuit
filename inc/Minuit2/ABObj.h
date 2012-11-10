@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: ABObj.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: ABObj.h 34019 2010-06-21 15:19:37Z rdm $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -31,7 +31,7 @@ private:
   ABObj& operator=(const ABObj&) {return *this;}
 
   template<class a, class b, class c>
-  ABObj(const ABObj<a,b,c>& obj) : fObject(M()), fFactor(T(0.)) {}
+  ABObj(const ABObj<a,b,c>&) : fObject(M()), fFactor(T(0.)) {}
 
   template<class a, class b, class c>
   ABObj& operator=(const ABObj<a,b,c>&) {return *this;}
@@ -49,7 +49,7 @@ public:
 
   template<class b, class c>
   ABObj(const ABObj<mtype,b,c>& obj) : 
-    fObject(M(obj.fObject)), fFactor(T(obj.fFactor)) {}
+     fObject(M(obj.Obj() )), fFactor(T(obj.f() )) {}
 
   const M& Obj() const {return fObject;}
 

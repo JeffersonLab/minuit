@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnGlobalCorrelationCoeff.cxx,v 1.1 2008/02/09 21:56:13 edwards Exp $
+// @(#)root/minuit2:$Id: MnGlobalCorrelationCoeff.cxx 24400 2008-06-20 07:28:49Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -32,7 +32,9 @@ MnGlobalCorrelationCoeff::MnGlobalCorrelationCoeff(const MnAlgebraicSymMatrix& c
       fValid = false;
    } else {
       
-      for(unsigned int i = 0; i < cov.Nrow(); i++) {
+      unsigned int n = cov.Nrow(); 
+      fGlobalCC.reserve(n); 
+      for(unsigned int i = 0; i < n; i++) {
          double denom = inv(i,i)*cov(i,i);
          if(denom < 1. && denom > 0.) fGlobalCC.push_back(0.);
          else fGlobalCC.push_back(std::sqrt(1. - 1./denom));

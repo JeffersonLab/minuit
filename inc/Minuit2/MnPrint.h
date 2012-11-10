@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnPrint.h,v 1.1 2008/02/09 21:56:12 edwards Exp $
+// @(#)root/minuit2:$Id: MnPrint.h 34256 2010-06-30 21:07:32Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -92,7 +92,7 @@ std::ostream& operator<<(std::ostream&, const ContoursError&);
 # define MN_INFO_VAL(x) \
    MN_OS << "Info: " << #x << " = " << (x) << std::endl; 
 # define MN_ERROR_VAL(x) \
-   MN_OS << "Info: " << #x << " = " << (x) << std::endl; 
+   MN_OS << "Error: " << #x << " = " << (x) << std::endl; 
 
 
 // same giving a location
@@ -104,9 +104,9 @@ std::ostream& operator<<(std::ostream&, const ContoursError&);
    MN_OS << "Error in " << loc << " : " << str \
        << std::endl;
 # define MN_INFO_VAL2(loc,x) \
-   MN_OS << loc << " : " << #x << " = " << (x) << std::endl;
+   MN_OS << "Info in " << loc << " : " << #x << " = " << (x) << std::endl;
 # define MN_ERROR_VAL2(loc,x) \
-   MN_OS << loc << " : " << #x << " = " << (x) << std::endl; 
+   MN_OS << "Error in " << loc << " : " << #x << " = " << (x) << std::endl; 
 
 
 
@@ -115,23 +115,32 @@ std::ostream& operator<<(std::ostream&, const ContoursError&);
 #include "TError.h"
 #include "Math/Util.h"
 
+// this first two should be used only with string literals to 
+// avoid warning produced by the format in TError
 #define  MN_INFO_MSG(str) \
    ::Info("Minuit2",str);
 #define  MN_ERROR_MSG(str) \
    ::Error("Minuit2",str);
 # define MN_INFO_VAL(x) \
    {std::string str = std::string(#x) + std::string(" = ") + ROOT::Math::Util::ToString(x); \
-   ::Info("Minuit2",str.c_str() );} 
+      ::Info("Minuit2","%s",str.c_str() );} 
 # define MN_ERROR_VAL(x) \
    {std::string str = std::string(#x) + std::string(" = ") + ROOT::Math::Util::ToString(x); \
-   ::Error("Minuit2",str.c_str() );} 
+   ::Error("Minuit2","%s",str.c_str() );} 
+
+# define MN_INFO_MSG2(loc,txt) \
+   {std::string str = std::string(loc) + std::string(" : ") + std::string(txt); \
+   ::Info("Minuit2","%s",str.c_str() );} 
+# define MN_ERROR_MSG2(loc,txt) \
+   {std::string str = std::string(loc) + std::string(" : ") + std::string(txt); \
+   ::Error("Minuit2","%s",str.c_str() );} 
 
 # define MN_INFO_VAL2(loc,x) \
    {std::string str = std::string(loc) + std::string(" : ") + std::string(#x) + std::string(" = ") + ROOT::Math::Util::ToString(x); \
-   ::Info("Minuit2",str.c_str() );} 
+   ::Info("Minuit2","%s",str.c_str() );} 
 # define MN_ERROR_VAL2(loc,x) \
    {std::string str = std::string(loc) + std::string(" : ") + std::string(#x) + std::string(" = ") + ROOT::Math::Util::ToString(x); \
-   ::Error("Minuit2",str.c_str() );} 
+   ::Error("Minuit2","%s",str.c_str() );} 
 
 
 

@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: MnUserParameterState.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: MnUserParameterState.cxx 34256 2010-06-30 21:07:32Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -10,6 +10,9 @@
 #include "Minuit2/MnUserParameterState.h"
 #include "Minuit2/MnCovarianceSqueeze.h"
 #include "Minuit2/MinimumState.h"
+
+#include "Minuit2/MnPrint.h" 
+
 
 namespace ROOT {
 
@@ -94,32 +97,32 @@ MnUserParameterState::MnUserParameterState(const MinimumState& st, double up, co
    //
    for(std::vector<MinuitParameter>::const_iterator ipar = trafo.Parameters().begin(); ipar != trafo.Parameters().end(); ipar++) {
       if((*ipar).IsConst()) {
-         Add((*ipar).Name(), (*ipar).Value());
+         Add((*ipar).GetName(), (*ipar).Value());
       } else if((*ipar).IsFixed()) {
-         Add((*ipar).Name(), (*ipar).Value(), (*ipar).Error());
+         Add((*ipar).GetName(), (*ipar).Value(), (*ipar).Error());
          if((*ipar).HasLimits()) {
             if((*ipar).HasLowerLimit() && (*ipar).HasUpperLimit())
-               SetLimits((*ipar).Name(), (*ipar).LowerLimit(),(*ipar).UpperLimit());
+               SetLimits((*ipar).GetName(), (*ipar).LowerLimit(),(*ipar).UpperLimit());
             else if((*ipar).HasLowerLimit() && !(*ipar).HasUpperLimit())
-               SetLowerLimit((*ipar).Name(), (*ipar).LowerLimit());
+               SetLowerLimit((*ipar).GetName(), (*ipar).LowerLimit());
             else
-               SetUpperLimit((*ipar).Name(), (*ipar).UpperLimit());
+               SetUpperLimit((*ipar).GetName(), (*ipar).UpperLimit());
          }
-         Fix((*ipar).Name());
+         Fix((*ipar).GetName());
       } else if((*ipar).HasLimits()) {
          unsigned int i = trafo.IntOfExt((*ipar).Number());
          double err = st.HasCovariance() ? sqrt(2.*up*st.Error().InvHessian()(i,i)) : st.Parameters().Dirin()(i);
-         Add((*ipar).Name(), trafo.Int2ext(i, st.Vec()(i)), trafo.Int2extError(i, st.Vec()(i), err));
+         Add((*ipar).GetName(), trafo.Int2ext(i, st.Vec()(i)), trafo.Int2extError(i, st.Vec()(i), err));
          if((*ipar).HasLowerLimit() && (*ipar).HasUpperLimit())
-            SetLimits((*ipar).Name(), (*ipar).LowerLimit(), (*ipar).UpperLimit());
+            SetLimits((*ipar).GetName(), (*ipar).LowerLimit(), (*ipar).UpperLimit());
          else if((*ipar).HasLowerLimit() && !(*ipar).HasUpperLimit())
-            SetLowerLimit((*ipar).Name(), (*ipar).LowerLimit());
+            SetLowerLimit((*ipar).GetName(), (*ipar).LowerLimit());
          else
-            SetUpperLimit((*ipar).Name(), (*ipar).UpperLimit());
+            SetUpperLimit((*ipar).GetName(), (*ipar).UpperLimit());
       } else {
          unsigned int i = trafo.IntOfExt((*ipar).Number());
          double err = st.HasCovariance() ? sqrt(2.*up*st.Error().InvHessian()(i,i)) : st.Parameters().Dirin()(i);
-         Add((*ipar).Name(), st.Vec()(i), err);
+         Add((*ipar).GetName(), st.Vec()(i), err);
       }
    }
    
@@ -159,64 +162,83 @@ const MinuitParameter& MnUserParameterState::Parameter(unsigned int i) const {
    return fParameters.Parameter(i);
 }
 
-void MnUserParameterState::Add(const char* Name, double val, double err) {
+void MnUserParameterState::Add(const std::string & name, double val, double err) {
    //add free Parameter
-   if ( fParameters.Add(Name, val, err) ) { 
+   if ( fParameters.Add(name, val, err) ) { 
       fIntParameters.push_back(val);
       fCovarianceValid = false;
       fGCCValid = false;
       fValid = true;
    }
    else { 
-      int i = Index(Name);
+      // redefine an existing parameter
+      int i = Index(name);
       SetValue(i,val);
+      if (Parameter(i).IsConst() ) { 
+         std::string msg = "Cannot modify status of constant parameter " + name; 
+         MN_INFO_MSG2("MnUserParameterState::Add",msg.c_str());
+         return;
+      }
       SetError(i,err);
+      // release if it was fixed 
+      if (Parameter(i).IsFixed() ) Release(i);  
    }
    
 }
 
-void MnUserParameterState::Add(const char* Name, double val, double err, double low, double up) {
+void MnUserParameterState::Add(const std::string & name, double val, double err, double low, double up) {
    //add limited Parameter
-   if ( fParameters.Add(Name, val, err, low, up) ) {  
+   if ( fParameters.Add(name, val, err, low, up) ) {  
       fCovarianceValid = false;
-      fIntParameters.push_back(Ext2int(Index(Name), val));
+      fIntParameters.push_back(Ext2int(Index(name), val));
       fGCCValid = false;
       fValid = true;
    }
    else { // Parameter already exist - just set values
-      int i = Index(Name);
+      int i = Index(name);
       SetValue(i,val);
+      if (Parameter(i).IsConst() ) { 
+         std::string msg = "Cannot modify status of constant parameter " + name; 
+         MN_INFO_MSG2("MnUserParameterState::Add",msg.c_str());
+         return;
+      }
       SetError(i,err);
       SetLimits(i,low,up);
+      // release if it was fixed 
+      if (Parameter(i).IsFixed() ) Release(i);  
    }
    
    
 }
 
-void MnUserParameterState::Add(const char* Name, double val) {
+void MnUserParameterState::Add(const std::string & name, double val) {
    //add const Parameter
-   if ( fParameters.Add(Name, val) ) 
+   if ( fParameters.Add(name, val) ) 
       fValid = true;
    else 
-      SetValue(Name,val);
+      SetValue(name,val);
 }
 
 //interaction via external number of Parameter
 
 void MnUserParameterState::Fix(unsigned int e) {
    // fix parameter e (external index)
-   unsigned int i = IntOfExt(e);
-   if(fCovarianceValid) {
-      fCovariance = MnCovarianceSqueeze()(fCovariance, i);
-      fIntCovariance = MnCovarianceSqueeze()(fIntCovariance, i);
+   if(!Parameter(e).IsFixed() && !Parameter(e).IsConst()) {
+      unsigned int i = IntOfExt(e);
+      if(fCovarianceValid) {
+         fCovariance = MnCovarianceSqueeze()(fCovariance, i);
+         fIntCovariance = MnCovarianceSqueeze()(fIntCovariance, i);
+      }
+      fIntParameters.erase(fIntParameters.begin()+i, fIntParameters.begin()+i+1);  
    }
-   fIntParameters.erase(fIntParameters.begin()+i, fIntParameters.begin()+i+1);  
    fParameters.Fix(e);
    fGCCValid = false;
 }
 
 void MnUserParameterState::Release(unsigned int e) {
    // release parameter e (external index)
+   // no-op if parameter is const
+   if (Parameter(e).IsConst() ) return;
    fParameters.Release(e);
    fCovarianceValid = false;
    fGCCValid = false;
@@ -304,37 +326,41 @@ double MnUserParameterState::Error(unsigned int i) const {
    return fParameters.Error(i);
 }
 
-//interaction via Name of Parameter
+//interaction via name of Parameter
 
-void MnUserParameterState::Fix(const char* Name) { Fix(Index(Name));}
+void MnUserParameterState::Fix(const std::string & name) { Fix(Index(name));}
 
-void MnUserParameterState::Release(const char* Name) {Release(Index(Name));}
+void MnUserParameterState::Release(const std::string & name) {Release(Index(name));}
 
-void MnUserParameterState::SetValue(const char* Name, double val) {SetValue(Index(Name), val);}
+void MnUserParameterState::SetValue(const std::string & name, double val) {SetValue(Index(name), val);}
 
-void MnUserParameterState::SetError(const char* Name, double val) { SetError(Index(Name), val);}
+void MnUserParameterState::SetError(const std::string & name, double val) { SetError(Index(name), val);}
 
-void MnUserParameterState::SetLimits(const char* Name, double low, double up) {SetLimits(Index(Name), low, up);}
+void MnUserParameterState::SetLimits(const std::string & name, double low, double up) {SetLimits(Index(name), low, up);}
 
-void MnUserParameterState::SetUpperLimit(const char* Name, double up) { SetUpperLimit(Index(Name), up);}
+void MnUserParameterState::SetUpperLimit(const std::string & name, double up) { SetUpperLimit(Index(name), up);}
 
-void MnUserParameterState::SetLowerLimit(const char* Name, double low) {SetLowerLimit(Index(Name), low);}
+void MnUserParameterState::SetLowerLimit(const std::string & name, double low) {SetLowerLimit(Index(name), low);}
 
-void MnUserParameterState::RemoveLimits(const char* Name) {RemoveLimits(Index(Name));}
+void MnUserParameterState::RemoveLimits(const std::string & name) {RemoveLimits(Index(name));}
 
-double MnUserParameterState::Value(const char* Name) const {return Value(Index(Name));}
+double MnUserParameterState::Value(const std::string & name) const {return Value(Index(name));}
 
-double MnUserParameterState::Error(const char* Name) const {return Error(Index(Name));}
+double MnUserParameterState::Error(const std::string & name) const {return Error(Index(name));}
 
 
-unsigned int MnUserParameterState::Index(const char* Name) const {
-   //convert Name into external number of Parameter
-   return fParameters.Index(Name);
+unsigned int MnUserParameterState::Index(const std::string & name) const {
+   //convert name into external number of Parameter
+   return fParameters.Index(name);
 }
 
 const char* MnUserParameterState::Name(unsigned int i) const {
-   //convert external number into Name of Parameter
+   //convert external number into name of Parameter (API returing a const char *)
    return fParameters.Name(i);
+}
+const std::string & MnUserParameterState::GetName(unsigned int i) const {
+   //convert external number into name of Parameter (new interface returning a string) 
+   return fParameters.GetName(i);
 }
 
 // transformation internal <-> external (forward to transformation class)

@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: Numerical2PGradientCalculator.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: Numerical2PGradientCalculator.cxx 29513 2009-07-17 15:30:07Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -16,11 +16,22 @@
 #include "Minuit2/FunctionGradient.h"
 #include "Minuit2/MnStrategy.h"
 
+
+//#define DEBUG
 #if defined(DEBUG) || defined(WARNINGMSG)
 #include "Minuit2/MnPrint.h" 
+#ifdef _OPENMP
+#include <omp.h>
+#include <iomanip>
+#ifdef DEBUG
+#define DEBUG_MP
+#endif
+#endif
 #endif
 
 #include <math.h>
+
+#include "Minuit2/MPIProcess.h"
 
 namespace ROOT {
 
@@ -68,7 +79,6 @@ FunctionGradient Numerical2PGradientCalculator::operator()(const MinimumParamete
    
    assert(par.IsValid());
    
-   MnAlgebraicVector x = par.Vec();
    
    double fcnmin = par.Fval();
    //   std::cout<<"fval: "<<fcnmin<<std::endl;
@@ -83,13 +93,52 @@ FunctionGradient Numerical2PGradientCalculator::operator()(const MinimumParamete
    //    std::cout<<"vrysml= "<<vrysml<<std::endl;
    //    std::cout << " ncycle " << Ncycle() << std::endl;
    
-   unsigned int n = x.size();
+   unsigned int n = (par.Vec()).size();
    unsigned int ncycle = Ncycle();
    //   MnAlgebraicVector vgrd(n), vgrd2(n), vgstp(n);
    MnAlgebraicVector grd = Gradient.Grad();
    MnAlgebraicVector g2 = Gradient.G2();
    MnAlgebraicVector gstep = Gradient.Gstep();
-   for(unsigned int i = 0; i < n; i++) {
+
+#ifndef _OPENMP
+   MPIProcess mpiproc(n,0);
+#endif
+
+#ifdef DEBUG
+   std::cout << "Calculating Gradient at x =   " << par.Vec() << std::endl;
+#endif
+
+#ifndef _OPENMP
+   // for serial execution this can be outside the loop
+   MnAlgebraicVector x = par.Vec();
+
+   unsigned int startElementIndex = mpiproc.StartElementIndex();
+   unsigned int endElementIndex = mpiproc.EndElementIndex();
+
+   for(unsigned int i = startElementIndex; i < endElementIndex; i++) {
+
+#else
+
+ // parallelize this loop using OpenMP
+//#define N_PARALLEL_PAR 5
+#pragma omp parallel
+#pragma omp for 
+//#pragma omp for schedule (static, N_PARALLEL_PAR)
+
+   for(int i = 0; i < int(n); i++) {
+
+#endif
+
+#ifdef DEBUG_MP
+      int ith = omp_get_thread_num();
+      //std::cout << "Thread number " << ith << "  " << i << std::endl;
+#endif
+
+#ifdef _OPENMP
+       // create in loop since each thread will use its own copy
+      MnAlgebraicVector x = par.Vec();
+#endif
+
       double xtf = x(i);
       double epspri = eps2 + fabs(grd(i)*eps2);
       double stepb4 = 0.;
@@ -139,12 +188,32 @@ FunctionGradient Numerical2PGradientCalculator::operator()(const MinimumParamete
          }
       }
       
+
+#ifdef DEBUG_MP
+#pragma omp critical
+      {
+         std::cout << "Gradient for thread " << ith << "  " << i << "  " << std::setprecision(15)  << grd(i) << "  " << g2(i) << std::endl;
+      }
+#endif
+
       //     vgrd(i) = grd;
       //     vgrd2(i) = g2;
       //     vgstp(i) = gstep;
    }  
+
+#ifdef DEBUG
+   std::cout << "Gradient =   " << grd << std::endl;
+#endif
+
    //   std::cout<<"final grd: "<<grd<<std::endl;
    //   std::cout<<"########### return from Numerical2PDerivative"<<std::endl;
+
+#ifndef _OPENMP
+   mpiproc.SyncVector(grd);
+   mpiproc.SyncVector(g2);
+   mpiproc.SyncVector(gstep);
+#endif
+
    return FunctionGradient(grd, g2, gstep);
 }
 

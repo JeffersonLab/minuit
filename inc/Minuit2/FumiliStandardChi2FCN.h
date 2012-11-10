@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FumiliStandardChi2FCN.h,v 1.1 2008/02/09 21:56:11 edwards Exp $
+// @(#)root/minuit2:$Id: FumiliStandardChi2FCN.h 29198 2009-06-24 13:05:43Z brun $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -84,7 +84,7 @@ public:
       if (mvar[i] == 0) 
 	fInvErrors[i] = 1; 
       else 
-	fInvErrors[i] = 1.0/sqrt(mvar[i]); 
+	fInvErrors[i] = 1.0/std::sqrt(mvar[i]); 
     }
 
   }
@@ -126,7 +126,7 @@ public:
       if (mvar[i] == 0) 
 	fInvErrors[i] = 1; 
       else 
-	fInvErrors[i] = 1.0/sqrt(mvar[i]); 
+	fInvErrors[i] = 1.0/std::sqrt(mvar[i]); 
     }
 
   }

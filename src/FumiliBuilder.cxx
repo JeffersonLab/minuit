@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FumiliBuilder.cxx,v 1.1 2008/02/09 21:56:13 edwards Exp $
+// @(#)root/minuit2:$Id: FumiliBuilder.cxx 30749 2009-10-15 16:33:04Z brun $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -115,8 +115,8 @@ FunctionMinimum FumiliBuilder::Minimum(const MnFcn& fcn, const GradientCalculato
       // call always Hesse (error matrix from Fumili is never accurate since is approximate) 
          
 #ifdef DEBUG
-      MN_INFO_MSG("FumiliBuilder will verify convergence and Error matrix. "<< std::endl;
-      MN_INFO_MSG("dcov is =  "<<  min.Error().Dcovar() << std::endl;
+      std::cout << "FumiliBuilder will verify convergence and Error matrix. " << std::endl;
+      std::cout << "dcov is =  "<<  min.Error().Dcovar() << std::endl;
 #endif
 
 //       // recalculate the gradient using the numerical gradient calculator
@@ -152,7 +152,7 @@ FunctionMinimum FumiliBuilder::Minimum(const MnFcn& fcn, const GradientCalculato
       }
       else { 
          // Case when edm < edmval after Heasse but min is flagged eith a  bad edm: 
-         // make then a new Funciton minimum since now edm is ok 
+         // make then a new Function minimum since now edm is ok 
          if (min.IsAboveMaxEdm() ) {
             min = FunctionMinimum( min.Seed(), min.States(), min.Up() );
             break;
@@ -162,7 +162,7 @@ FunctionMinimum FumiliBuilder::Minimum(const MnFcn& fcn, const GradientCalculato
       
       // end loop on iterations
       // ? need a maximum here (or max of function calls is enough ? ) 
-      // continnue iteration (re-calculate funciton Minimum if edm IS NOT sufficient) 
+      // continnue iteration (re-calculate function Minimum if edm IS NOT sufficient) 
       // no need to check that hesse calculation is done (if isnot done edm is OK anyway)
       // count the pass to exit second time when function Minimum is invalid
       // increase by 20% maxfcn for doing some more tests
@@ -278,13 +278,13 @@ FunctionMinimum FumiliBuilder::Minimum(const MnFcn& fcn, const GradientCalculato
       
       //     MnParabolaPoint pp = lsearch(fcn, s0.Parameters(), step, gdel, prec);
       
-      //     if(fabs(pp.y() - s0.Fval()) < prec.Eps()) {
+      //     if(fabs(pp.Y() - s0.Fval()) < prec.Eps()) {
       //       std::cout<<"FumiliBuilder: no improvement"<<std::endl;
       //       break; //no improvement
       //     }
       
       
-      //     MinimumParameters p(s0.Vec() + pp.x()*step, pp.y());
+      //     MinimumParameters p(s0.Vec() + pp.X()*step, pp.Y());
       
       // if taking a full step 
       
@@ -298,11 +298,11 @@ FunctionMinimum FumiliBuilder::Minimum(const MnFcn& fcn, const GradientCalculato
          MnLineSearch lsearch;   
          MnParabolaPoint pp = lsearch(fcn, s0.Parameters(), step, gdel, prec);
          
-         if(fabs(pp.y() - s0.Fval()) < prec.Eps()) {
+         if(fabs(pp.Y() - s0.Fval()) < prec.Eps()) {
             //std::cout<<"FumiliBuilder: no improvement"<<std::endl;
             break; //no improvement
          }
-         p =  MinimumParameters(s0.Vec() + pp.x()*step, pp.y() );
+         p =  MinimumParameters(s0.Vec() + pp.X()*step, pp.Y() );
       }
       
 #ifdef DEBUG

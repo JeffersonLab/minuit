@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: BasicMinimumError.cxx,v 1.1 2008/02/09 21:56:13 edwards Exp $
+// @(#)root/minuit2:$Id: BasicMinimumError.cxx 23522 2008-04-24 15:09:19Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -28,11 +28,11 @@ MnAlgebraicSymMatrix BasicMinimumError::Hessian() const {
 #ifdef WARNINGMSG
       MN_INFO_MSG("BasicMinimumError:  inversion fails; return diagonal matrix.");
 #endif
-      MnAlgebraicSymMatrix tmp(fMatrix.Nrow());
+      MnAlgebraicSymMatrix tmp2(fMatrix.Nrow());
       for(unsigned int i = 0; i < fMatrix.Nrow(); i++) {
-         tmp(i,i) = 1./fMatrix(i,i);
+         tmp2(i,i) = 1./fMatrix(i,i);
       }
-      return tmp;
+      return tmp2;
    }
    return tmp;
 }

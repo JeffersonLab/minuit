@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: FlatRandomGen.h,v 1.2 2008/10/20 17:57:02 edwards Exp $
+// @(#)root/minuit2:$Id: FlatRandomGen.h 20880 2007-11-19 11:23:41Z rdm $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -32,7 +32,7 @@ public:
   double Delta() const {return fDelta;}
 
   double operator()() const {
-    return 2.*Delta()*(rand()/double(RAND_MAX) - 0.5) + Mean();
+    return 2.*Delta()*(std::rand()/double(RAND_MAX) - 0.5) + Mean();
   }
 
 private:

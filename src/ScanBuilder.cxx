@@ -1,4 +1,4 @@
-// @(#)root/minuit2:$Name:  $:$Id: ScanBuilder.cxx,v 1.1 2008/02/09 21:56:14 edwards Exp $
+// @(#)root/minuit2:$Id: ScanBuilder.cxx 23654 2008-05-06 07:30:34Z moneta $
 // Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
 
 /**********************************************************************
@@ -21,6 +21,7 @@ namespace ROOT {
 
 FunctionMinimum ScanBuilder::Minimum(const MnFcn& mfcn, const GradientCalculator&, const MinimumSeed& seed, const MnStrategy&, unsigned int, double) const {
    // find the function minimum performing a parameter scan (using MnParameterScan class)  
+   // function gradient is not used
    MnAlgebraicVector x = seed.Parameters().Vec();
    MnUserParameterState upst(seed.State(), mfcn.Up(), seed.Trafo());
    MnParameterScan scan(mfcn.Fcn(), upst.Parameters(), seed.Fval());
