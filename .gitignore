@@ -1,0 +1,11 @@
+Makefile.in
+aclocal.m4
+configure
+doc/Makefile.in
+inc/Makefile.in
+inc/Math/Makefile.in
+inc/Minuit2/Makefile.in
+src/Makefile.in
+test/Makefile.in
+test/MnSim/Makefile.in
+test/MnTutorial/Makefile.in
