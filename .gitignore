@@ -9,3 +9,7 @@ src/Makefile.in
 test/Makefile.in
 test/MnSim/Makefile.in
 test/MnTutorial/Makefile.in
+config.h.in
+autom4te.cache
+config.h.in~
+

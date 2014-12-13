@@ -3,10 +3,10 @@ dnl
 dnl Author: Paul F. Kunz <Paul_Kunz@slac.stanford.edu>
 dnl
 
-AC_INIT(src/VariableMetricBuilder.cxx)
+AC_INIT(Minuit2,5.28.00)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(Minuit2, 5.28.00)
+AC_CONFIG_SRCDIR(src/VariableMetricBuilder.cxx)
 
 dnl Checks for programs.
 AC_PROG_CC
