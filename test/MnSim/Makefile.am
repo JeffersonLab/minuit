@@ -34,74 +34,26 @@ test_Minuit2_DemoFumili_SOURCES =	\
 	GaussDataGen.cxx	\
 	DemoFumili.cxx			
 
-test_Minuit2_PaulTest_SOURCES =	PaulTest.cxx 
+test_Minuit2_PaulTest_SOURCES =	PaulTest.cxx GaussFcn.cxx
 
-test_Minuit2_PaulTest2_SOURCES =	PaulTest2.cxx 
+test_Minuit2_PaulTest2_SOURCES = PaulTest2.cxx GaussFcn.cxx
 
 test_Minuit2_PaulTest3_SOURCES =	        \
 		      GaussFcn2.h       \
                       GaussFcn2.cxx     \
                       PaulTest3.cxx
 
-test_Minuit2_PaulTest4_SOURCES =	PaulTest4.cxx 
+test_Minuit2_PaulTest4_SOURCES = PaulTest4.cxx 
 
 test_Minuit2_ReneTest_SOURCES =	ReneTest.cxx 
 
-INCLUDES =					\
-	-I$(top_srcdir)/inc
+AM_CXXFLAGS = -I$(top_srcdir)/inc
 
-test_Minuit2_DemoGaussSim_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
+#AM_LDFLAGS = -L. \
+#             -L@top_builddir@/lib \
+#             @LDFLAGS@
 
-test_Minuit2_DemoGaussSim_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_DemoFumili_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_DemoFumili_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_PaulTest_LDADD =	 \
-	GaussFcn.o			\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_PaulTest_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_PaulTest2_LDADD =				\
-	GaussFcn.o			\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_PaulTest2_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_PaulTest3_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_PaulTest3_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_PaulTest4_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_PaulTest4_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_ReneTest_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_ReneTest_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-
+LDADD = $(top_builddir)/src/libMinuit2Base.a
 
 AllSOURCES =				        \
 	$(test_Minuit2_DemoGaussSim_SOURCES)     \

@@ -3,7 +3,7 @@ dnl
 dnl Author: Paul F. Kunz <Paul_Kunz@slac.stanford.edu>
 dnl
 
-AC_INIT(Minuit2,5.28.00)
+AC_INIT(Minuit2,5.28.00,edwards@jlab.org)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR(src/VariableMetricBuilder.cxx)
@@ -11,20 +11,8 @@ AC_CONFIG_SRCDIR(src/VariableMetricBuilder.cxx)
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
-
 AC_LANG_CPLUSPLUS
-
-dnl Force libtool to use C++ compiler when checking for PIC 
-dnl   for solaris
-CC=$CXX
-
-dnl disable static building
-#AM_DISABLE_STATIC
-#AM_PROG_LIBTOOL
-
-dnl Checks for libraries.
-dnl Get the path to the standard C++ library
-PFK_CXX_LIB_PATH
+AC_PROG_RANLIB
 
 dnl check STD C++ library
 AC_CHECK_LIB(stdc++, main, LIBSTDCPP="lstdc++", LIBSTDCPP=)
@@ -34,11 +22,8 @@ AC_SUBST(LIBSTDCPP)
 dnl Turn on -Wall if compiling with gcc
 #AC_COMPILE_WARNINGS
 
-dnl Check for gmake and use it
-AC_CHECK_PROG(GMAKE, gmake, gmake, make)
-AC_SUBST(GMAKE)
-
-AC_PROG_RANLIB
+dnl Initialise automake
+AM_INIT_AUTOMAKE
 
 AC_OPENMP
 CFLAGS="$CFLAGS $OPENMP_CFLAGS"

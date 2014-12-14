@@ -12,4 +12,3 @@ test/MnTutorial/Makefile.in
 config.h.in
 autom4te.cache
 config.h.in~
-

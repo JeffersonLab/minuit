@@ -80,8 +80,7 @@ libMinuit2Base_a_SOURCES =				\
 	 mnvert.cxx				\
          mnxerbla.cxx                        
 
-INCLUDES =					\
-	-I$(top_srcdir)/inc
+AM_CXXFLAGS = -I$(top_srcdir)/inc
 
 # For platforms where automake dependency generation doesn't work.
 depend: $(libMinuit2Base_a_SOURCES)

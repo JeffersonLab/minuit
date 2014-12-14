@@ -6,9 +6,6 @@
 # The following is set; otherwise, it would follow GNU conventions.
 # AUTOMAKE_OPTIONS = foreign
 
-## Subsitution from pfkeb_cxx_lib_path
-CXX_LIB_PATH = @CXX_LIB_PATH@
-
 check_PROGRAMS =	\
 	test_Minuit2_Quad4FMain	\
 	test_Minuit2_Quad8FMain	\
@@ -37,42 +34,9 @@ AllSOURCES =				\
 	$(test_Minuit2_Quad12FMain_SOURCES)		\
 	$(test_Minuit2_Quad1FMain_SOURCES)		
 
-INCLUDES =				\
-	-I$(top_srcdir)/inc	
+AM_CXXFLAGS = -I$(top_srcdir)/inc
 
-
-test_Minuit2_Quad4FMain_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_Quad1FMain_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-
-test_Minuit2_Quad8FMain_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-test_Minuit2_Quad12FMain_LDADD =				\
-	$(top_builddir)/src/libMinuit2Base.a
-
-
-test_Minuit2_Quad4FMain_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_Quad1FMain_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-
-test_Minuit2_Quad8FMain_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-test_Minuit2_Quad12FMain_LDFLAGS =				\
-	-L$(CXX_LIB_PATH)			\
-	-R$(CXX_LIB_PATH)
-
-
+LDADD = $(top_builddir)/src/libMinuit2Base.a
 
 # For platforms where automake dependency generation doesn't work.
 depend: $(AllSOURCES)
