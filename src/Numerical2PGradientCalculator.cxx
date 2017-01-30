@@ -119,11 +119,13 @@ FunctionGradient Numerical2PGradientCalculator::operator()(const MinimumParamete
 
 #else
 
+#ifdef USE_OMP
+ // djw: added an extra guard to prevent this getting activated in scattering
+#warning "Using openmp in Numerical2PGradientCalculator.cxx"
+
  // parallelize this loop using OpenMP
-//#define N_PARALLEL_PAR 5
-#pragma omp parallel
-#pragma omp for 
-//#pragma omp for schedule (static, N_PARALLEL_PAR)
+#pragma omp parallel for 
+#endif     
 
    for(int i = 0; i < int(n); i++) {
 
