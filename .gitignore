@@ -1,6 +1,7 @@
 Makefile.in
 aclocal.m4
 configure
+configure~
 doc/Makefile.in
 inc/Makefile.in
 inc/Math/Makefile.in
